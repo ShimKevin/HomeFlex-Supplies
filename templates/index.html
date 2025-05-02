@@ -58,7 +58,7 @@
             <div class="products-grid" id="productsGrid">
                 {% for product in products %}
                 <div class="product-card" data-category="{{ product.category }}" data-price="{{ product.price }}">
-                    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" loading="lazy">
                     <h3>{{ product.name }}</h3>
                     <p>KES {{ product.price }}</p>
                     <button class="order-btn" data-name="{{ product.name }}">Order</button>
@@ -202,50 +202,42 @@
     </footer>
 
     <script>
-        let cart = [];
+        // Add swipe detection for mobile
+        let touchStartX = 0;
+        const swipeThreshold = 50;
 
-        function updateCartDisplay() {
-            const cartItemsContainer = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
-            cartItemsContainer.innerHTML = '';
-            let total = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
 
-            cart.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.classList.add('cart-item');
-                itemElement.innerHTML = `
-                    <p>${item.name} (x${item.quantity}) - KES ${item.price * item.quantity}</p>
-                    <button class="remove-btn" data-name="${item.name}">Remove</button>
-                `;
-                cartItemsContainer.appendChild(itemElement);
-                total += item.price * item.quantity;
-            });
+        document.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const deltaX = touchEndX - touchStartX;
 
-            cartTotal.textContent = total.toFixed(2);
-
-            document.querySelectorAll('.remove-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const itemName = button.dataset.name;
-                    cart = cart.filter(item => item.name !== itemName);
-                    updateCartDisplay();
+            if (Math.abs(deltaX) > swipeThreshold) {
+                const scrollContainer = document.scrollingElement;
+                const scrollAmount = window.innerWidth * 0.8;
+                
+                scrollContainer.scrollBy({
+                    left: deltaX > 0 ? -scrollAmount : scrollAmount,
+                    behavior: 'smooth'
                 });
-            });
-        }
+            }
+        });
 
+        // Update the current year in the footer
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+
+        // Toggle Feedback Modal
         function toggleFeedbackForm() {
             const modal = document.getElementById('feedbackModal');
             modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
         }
 
-        window.onclick = function(event) {
-            const modal = document.getElementById('feedbackModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-
+        // Product Filtering
         document.addEventListener('DOMContentLoaded', () => {
-            // Filter Buttons
             const filterButtons = document.querySelectorAll('.filter-btn');
             const productCards = document.querySelectorAll('.product-card');
 
@@ -269,7 +261,13 @@
                 });
             });
 
-            // Search Bar
+            // Show modal
+            document.querySelector('.feedback-modal').classList.add('active');
+
+            //Hide modal
+            document.querySelector('.feedback-modal').classList.remove('active');
+
+            // Search Bar Functionality
             document.getElementById('searchInput').addEventListener('input', (event) => {
                 const searchQuery = event.target.value.toLowerCase();
 
@@ -284,39 +282,6 @@
                     }
                 });
             });
-
-            document.querySelectorAll('.order-btn').forEach(button => {
-                button.addEventListener('click', () => {
-                    const itemName = button.dataset.name;
-                    const itemPrice = parseFloat(button.closest('.product-card').dataset.price);
-
-                    const existingItem = cart.find(item => item.name === itemName);
-                    if (existingItem) {
-                        existingItem.quantity += 1;
-                    } else {
-                        cart.push({ name: itemName, price: itemPrice, quantity: 1 });
-                    }
-
-                    updateCartDisplay();
-                    document.getElementById('cartModal').style.display = 'block';
-                });
-            });
-
-            document.querySelectorAll('.close').forEach(closeBtn => {
-                closeBtn.addEventListener('click', () => {
-                    document.querySelectorAll('.modal').forEach(modal => {
-                        modal.style.display = 'none';
-                    });
-                });
-            });
-
-            window.onclick = function(event) {
-                if (event.target.classList.contains('modal')) {
-                    event.target.style.display = 'none';
-                }
-            };
-
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
         });
     </script>
 </body>

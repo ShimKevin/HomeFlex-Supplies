@@ -1,3 +1,4 @@
+/* Root Variables */
 :root {
     --primary: #FF6B6B;
     --secondary: #4ECDC4;
@@ -7,6 +8,7 @@
     --success: #4CAF50;
 }
 
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -15,15 +17,23 @@
 }
 
 body {
-    background-color: var(--light);
-    color: var(--dark);
+    overflow-x: auto; /* Allow horizontal scrolling */
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: none; /* Remove any max-width restrictions */
+    margin: 0 auto;
 }
 
 /* Navigation */
 .main-nav {
     background: white;
     padding: 1rem 2rem;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
@@ -38,22 +48,51 @@ body {
     height: 60px;
 }
 
-.cart-section {
-    position: relative;
-}
 
-.checkout-btn {
-    background: var(--primary);
+/* Cart Icon Styling */
+.cart-section .checkout-btn {
+    background: linear-gradient(135deg, black, gold); /* Black and gold gradient */
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 25px;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.checkout-btn:hover {
-    transform: translateY(-2px);
+.cart-section .checkout-btn:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Add a stronger shadow */
+}
+
+/* Complete Your Order Button */
+.modal-content .proceed {
+    background: var(--success); /* Green background */
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    width: 100%; /* Full-width button */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content .proceed:hover {
+    background: #3a9d3a; /* Darker green on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.modal-content .proceed:active {
+    background: #2e7d32; /* Even darker green when clicked */
+    transform: scale(0.98); /* Slightly shrink on click */
 }
 
 /* Hero Section */
@@ -62,51 +101,62 @@ body {
     padding: 4rem 2rem;
     text-align: center;
     color: white;
+    width: 100vw; /* Ensure the hero section spans the full viewport width */
+    overflow-x: hidden; /* Prevent content overflow */
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 1200px; /* Center content within the hero */
     margin: 0 auto;
+    padding: 0 1rem; /* Add padding to prevent content from sticking to the edges */
 }
 
 .hero h1 {
     font-size: 3.5rem;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Search Bar */
 .search-bar {
-    margin-top: 2rem;
     display: flex;
     justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    max-width: 600px; /* Adjust the width of the search bar container */
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .search-bar input {
-    padding: 1rem;
-    border: none;
-    border-radius: 30px 0 0 30px;
-    width: 400px;
-    font-size: 1.1rem;
+    width: 100%; /* Ensure the input takes the full width of the container */
+    padding: 1rem; /* Add padding for better usability */
+    border: 2px solid var(--primary); /* Add a border with the primary color */
+    border-radius: 30px 0 0 30px; /* Rounded corners for the left side */
+    font-size: 1rem; /* Adjust font size */
+    outline: none; /* Remove default outline */
+    color: var(--dark); /* Text color */
+    background-color: var(--light); /* Background color */
+    transition: border-color 0.3s ease;
+}
+
+.search-bar input:focus {
+    border-color: var(--secondary); /* Change border color on focus */
 }
 
 .search-bar button {
-    padding: 1rem 1.5rem;
-    border: none;
-    background: var(--accent);
-    color: var(--dark);
-    border-radius: 0 30px 30px 0;
-    cursor: pointer;
+    padding: 1rem 1.5rem; /* Add padding for the button */
+    border: none; /* Remove default border */
+    background: var(--primary); /* Button background color */
+    color: white; /* Button text color */
+    border-radius: 0 30px 30px 0; /* Rounded corners for the right side */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    font-size: 1rem; /* Adjust font size */
     transition: background 0.3s ease;
 }
 
-/* Main Content */
-.main-content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 3rem;
-    max-width: 1400px;
-    margin: 2rem auto;
-    padding: 0 2rem;
+.search-bar button:hover {
+    background: var(--secondary); /* Change background color on hover */
 }
 
 /* Products Section */
@@ -116,8 +166,11 @@ body {
 
 .filters {
     display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Center the buttons vertically */
+    gap: 1rem; /* Add spacing between buttons */
+    margin-bottom: 2rem; /* Add spacing below the filters */
+    text-align: center; /* Ensure text inside buttons is centered */
 }
 
 .filter-btn {
@@ -128,6 +181,7 @@ body {
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-align: center; /* Center text inside the button */
 }
 
 .filter-btn.active, .filter-btn:hover {
@@ -150,7 +204,7 @@ body {
 
 .product-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .product-card img {
@@ -184,7 +238,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
 }
 
@@ -207,396 +261,30 @@ body {
     color: #888;
 }
 
-/* Enhanced Checkout */
-.checkout-btn.proceed {
-    background: var(--success);
-    font-weight: 700;
-    font-size: 1.2rem;
-    padding: 1.2rem 2.5rem;
-    margin-top: 1.5rem;
-    width: 100%;
-    box-shadow: 0 4px 15px rgba(76,175,80,0.3);
-}
-
-.delivery-info {
-    background: #e8f5e9;
-    padding: 1.5rem;
-    border-radius: 15px;
-    margin: 1.5rem 0;
-    border-left: 4px solid var(--success);
-}
-
-.delivery-info h3 {
-    color: var(--dark);
-    margin-bottom: 1rem;
-}
-
-.delivery-info p {
-    margin: 0.8rem 0;
-    font-weight: 500;
-}
-
-/* Feedback Section */
-.feedback-section {
-    background: white;
-    padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-}
-
 /* Footer */
 .main-footer {
     background: var(--dark);
     color: white;
     padding: 2rem;
     text-align: center;
+    width: 100vw; /* Ensure the footer spans the full viewport width */
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.social-links {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.social-icon {
-    color: white;
-    font-size: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.social-icon:hover {
-    transform: translateY(-3px);
-}
-
-.copyright {
-    margin-top: 1rem;
-    opacity: 0.8;
-}
-
-@media (max-width: 768px) {
-    .main-content {
-        grid-template-columns: 1fr;
-        padding: 0 1rem;
-    }
-    
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-    
-    .search-bar input {
-        width: 70%;
-    }
-}
-
-/* Feedback Button Styles */
-.feedback-container {
-    position: fixed;
-    left: 20px;
-    bottom: 20px;
-    z-index: 1000;
-}
-
-.feedback-btn {
-    background-color: #2196F3;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.feedback-btn:hover {
-    background-color: #1976D2;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Feedback Button */
-.feedback-container {
-    position: fixed;
-    left: 20px; /* Align to the left side */
-    bottom: 20px; /* Align to the bottom of the footer */
-    z-index: 1000;
-}
-
-.feedback-btn {
-    background-color: #2196F3; /* Blue button */
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.feedback-btn:hover {
-    background-color: #1976D2; /* Darker blue on hover */
-    transform: translateY(-2px);
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Feedback Modal */
-.feedback-modal {
-    display: none; /* Hidden by default */
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    z-index: 1001;
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 15% auto;
-    padding: 25px;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 8px;
-    position: relative;
-    animation: modalOpen 0.3s ease;
-}
-
-@keyframes modalOpen {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.close-btn {
-    position: absolute;
-    right: 20px;
-    top: 10px;
-    font-size: 28px;
-    cursor: pointer;
-    color: #666;
-}
-
-.close-btn:hover {
-    color: #333;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .feedback-btn {
-        left: 10px;
-        bottom: 10px;
-        padding: 10px 20px;
-        font-size: 14px;
-    }
-
-    .modal-content {
-        margin: 30% auto;
-        padding: 15px;
-    }
-}
-
-/* Live Chat */
-.live-chat {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background: #25d366;
-    color: white;
-    padding: 1rem 1.5rem;
-    border-radius: 50px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    font-size: 1.2rem;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.live-chat:hover {
-    transform: scale(1.1);
-    background: #1ebe57;
-}
-
-.live-chat i {
-    font-size: 1.5rem;
-}
-
-/* Order Form */
-.modal-content form .form-group input,
-.modal-content form .form-group textarea {
-    padding: 1rem;
-    font-size: 1.1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-.submit-btn.bold-blue {
-    background: #007bff;
-    color: white;
-    font-weight: bold;
-    padding: 1rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.submit-btn.bold-blue:hover {
-    background: #0056b3;
-}
-
-/* Product Images */
-.product-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    border: none;
-    margin-bottom: 1rem;
-}
-
-/* Admin Panel */
-.admin-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #f9f9f9;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.admin-container h1, .admin-container h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 1.5rem;
-}
-
-.admin-form {
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
-}
-
-.admin-form .form-group {
-    margin-bottom: 1rem;
-}
-
-.admin-form input, .admin-form textarea, .admin-form select {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.admin-form button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.admin-form button:hover {
-    background: #0056b3;
-}
-
-/* Product List */
-.product-list {
-    margin-top: 2rem;
-}
-
-.product-items {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
-
-.product-item {
-    background: white;
-    padding: 1rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.product-item img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-}
-
-.product-info h3 {
-    font-size: 1.2rem;
-    color: #333;
-    margin-bottom: 0.5rem;
-}
-
-.product-meta {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 1rem;
-}
-
-.product-actions button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    margin: 0.2rem;
-    transition: background 0.3s ease;
-}
-
-.product-actions button:hover {
-    background: #0056b3;
-}
-
-.footer-content {
-    display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Align footer sections horizontally */
     align-items: flex-start;
     flex-wrap: wrap;
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
 .footer-address, .footer-contacts, .footer-payment {
     flex: 1;
     min-width: 200px;
+    text-align: left; /* Align text to the left */
 }
 
 .footer-contacts h3, .footer-payment h3 {
@@ -625,78 +313,163 @@ body {
     align-items: center;
     gap: 0.5rem;
     transition: color 0.3s ease;
-    justify-content: center;
 }
 
 .call-btn:hover {
-    color: #007bff;
+    color: var(--primary);
 }
 
-.payment-link {
-    color: #fff;
-    font-weight: bold;
-    text-decoration: none;
-    background: #007bff;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 1rem;
-    transition: background 0.3s ease;
-    text-align: center;
-}
-
-.payment-link:hover {
-    background: #0056b3;
-}
-
-.payment-instructions {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #fff;
-    opacity: 0.8;
-}
-
-.social-links {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    justify-content: center;
-}
-
-.social-icon {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
+/* Live Chat Button */
+.live-chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #25D366; /* WhatsApp green */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 50px;
+    font-size: 1rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: #fff;
+    gap: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-decoration: none;
+    z-index: 1000;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.social-icon:hover {
+.live-chat:hover {
     transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Facebook Button */
-.social-icon.facebook {
-    background-color: #1877f2;
+/* Feedback Button */
+.feedback-button {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #FFDB58; /* Mustard color */
+    color: var(--dark);
+    padding: 12px 24px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1999; /* Just below modal */
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.social-icon.facebook:hover {
-    background-color: #145dbf;
+.feedback-button:hover {
+    background-color: #FFD700; /* Darker mustard on hover */
+    transform: translateY(-2px);
 }
 
-/* Instagram Button */
-.social-icon.instagram {
-    background: radial-gradient(circle at 30% 30%, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+/* Feedback Modal */
+.feedback-modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
 }
 
-.social-icon.instagram:hover {
-    background: radial-gradient(circle at 30% 30%, #feda75, #e6683c, #c32aa3, #833ab4, #3a539b);
+.feedback-modal.active {
+    display: flex; /* Show modal when active */
+}
+
+.feedback-modal .modal-content {
+    background: white;
+    padding: 2rem;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    text-align: left;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Keep original form styles below */
+.feedback-modal .modal-content h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.feedback-modal .modal-content p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+}
+
+.feedback-modal .modal-content .form-group {
+    margin-bottom: 1rem;
+}
+
+.feedback-modal .modal-content input,
+.feedback-modal .modal-content textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--primary);
+    border-radius: 5px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.feedback-modal .modal-content input:focus,
+.feedback-modal .modal-content textarea:focus {
+    border-color: var(--secondary);
+}
+
+.feedback-modal .modal-content textarea {
+    resize: none;
+    height: 100px;
+}
+
+.feedback-modal .modal-content .submit-btn {
+    background: var(--success);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+}
+
+.feedback-modal .modal-content .submit-btn:hover {
+    background: #3a9d3a;
+}
+
+.feedback-modal .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    color: var(--dark);
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
 }
 
 /* Social Media Icons */
@@ -725,7 +498,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Facebook Button */
 .social-icon.facebook {
     background-color: #1877f2;
 }
@@ -734,7 +506,6 @@ body {
     background-color: #145dbf;
 }
 
-/* Instagram Button */
 .social-icon.instagram {
     background: radial-gradient(circle at 30% 30%, #feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
 }
@@ -743,7 +514,6 @@ body {
     background: radial-gradient(circle at 30% 30%, #feda75, #e6683c, #c32aa3, #833ab4, #3a539b);
 }
 
-/* TikTok Button */
 .social-icon.tiktok {
     background-color: #000000;
 }
@@ -754,15 +524,8 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .main-nav {
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem; /* Add padding for better alignment */
-    }
-
-    .social-links {
-        margin-top: 1rem;
-        justify-content: center;
+    .hero h1 {
+        font-size: 2.5rem;
     }
 
     .products-grid {
@@ -774,25 +537,16 @@ body {
         text-align: center;
     }
 
-    img {
-       max-width: 100%; /* Ensure images do not exceed the screen width */
-        height: auto; /* Maintain aspect ratio */
-    }
-
     .footer-content {
         flex-direction: column;
         align-items: center;
         text-align: center;
-        padding: 1rem; /* Add padding for better spacing */
+        padding: 1rem;
     }
 
     .footer-address, .footer-contacts, .footer-payment {
         margin-bottom: 1rem;
         width: 100%; /* Ensure full width for alignment */
-    }
-
-    .hero-content {
-        padding: 0 1rem; /* Add padding to prevent overflow */
     }
 
     .search-bar input {

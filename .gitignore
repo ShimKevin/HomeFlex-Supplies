@@ -6,3 +6,8 @@ __pycache__/
 *.sqlite
 instance/
 *.env
+
+# IDE and system files
+HomeFlex-Supplies-Clone/
+HomeFlex-Supplies/
+admin_access.log
