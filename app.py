@@ -53,6 +53,10 @@ def login_required(f):
     return decorated_function
 
 @app.route('/')
+def home():
+    return render_template('index.html', products=Product.query.all())
+
+@app.route('/')
 def index():
     """Homepage displaying all products."""
     products = Product.query.all()
@@ -138,7 +142,10 @@ def update_credentials():
 
 if __name__ == '__main__':
     with app.app_context():
+        # Ensure the database and tables are created
         db.create_all()
+
+        # Create a default admin user if none exists
         if not Admin.query.first():
             hashed_password = generate_password_hash("admin123", method='pbkdf2:sha256')
             admin = Admin(username="admin", password=hashed_password)

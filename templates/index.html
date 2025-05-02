@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+
+    <!-- Live Chat Section -->
+    <div class="live-chat">
+        <a href="https://wa.me/0701937629" target="_blank">
+            <i class="fab fa-whatsapp"></i> Live Chat
+        </a>
+    </div>
     
     <!-- Navigation -->
     <nav class="main-nav">
@@ -43,6 +50,9 @@
                 <button class="filter-btn" data-filter="kitchen">Kitchen</button>
                 <button class="filter-btn" data-filter="bath">Bath</button>
                 <button class="filter-btn" data-filter="living">Living</button>
+                <button class="filter-btn" data-filter="bedroom">Bedroom</button>
+                <button class="filter-btn" data-filter="office">Office</button>
+                <button class="filter-btn" data-filter="outdoor">Outdoor</button>
             </div>
             
             <div class="products-grid" id="productsGrid">
@@ -59,32 +69,41 @@
 
         <!-- Feedback Section -->
         <section class="feedback-section">
-            <button class="feedback-toggle-btn" onclick="toggleFeedback()">We Value Your Feedback</button>
-            <div id="feedbackForm" style="display: none;">
-                <h2>We Value Your Feedback</h2>
-                <p class="feedback-description">Let us know how we can improve your shopping experience!</p>
-                <form action="https://formsubmit.co/kevinshimannjala@gmail.com" method="POST">
-                    <input type="hidden" name="_subject" value="New Customer Feedback">
-                    <input type="hidden" name="_captcha" value="false">
-                    <div class="form-group">
-                        <input type="text" name="name" placeholder="Your Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" name="email" placeholder="Your Email" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="feedback" placeholder="Your Feedback" required></textarea>
-                    </div>
-                    <button type="submit" class="submit-btn">Submit Feedback</button>
-                </form>
+            <div id="feedbackModal" class="feedback-modal">
+                <div class="modal-content">
+                    <span class="close-btn" onclick="toggleFeedbackForm()">&times;</span>
+                    <h2>We Value Your Feedback</h2>
+                    <p>Let us know how we can improve your shopping experience!</p>
+                    <form action="https://formsubmit.co/kevinshimanjala@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New Customer Feedback">
+                        <input type="hidden" name="_captcha" value="false">
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="feedback" placeholder="Your Feedback" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Submit Feedback</button>
+                    </form>
+                </div>
             </div>
         </section>
+
+        <!-- Feedback Button -->
+        <div class="feedback-container">
+            <button class="feedback-btn" onclick="toggleFeedbackForm()">
+                <i class="fas fa-comment-alt"></i> We Value Your Feedback
+            </button>
+        </div>
     </main>
 
     <!-- Cart Modal -->
     <div id="cartModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="document.getElementById('cartModal').style.display = 'none';">&times;</span>
             <h2>Your Shopping Cart</h2>
             <div id="cartItems">
                 <!-- Cart items will be dynamically populated here -->
@@ -99,7 +118,7 @@
     <!-- Order Modal -->
     <div id="orderModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" onclick="document.getElementById('orderModal').style.display = 'none';">&times;</span>
             <h2>Complete Your Order</h2>
             <form id="orderForm" action="https://formsubmit.co/kevinshimanjala@gmail.com" method="POST">
                 <input type="hidden" name="_subject" value="New Order Received">
@@ -213,12 +232,59 @@
             });
         }
 
-        function toggleFeedback() {
-            const feedbackForm = document.getElementById('feedbackForm');
-            feedbackForm.style.display = feedbackForm.style.display === 'none' ? 'block' : 'none';
+        function toggleFeedbackForm() {
+            const modal = document.getElementById('feedbackModal');
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('feedbackModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Filter Buttons
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const productCards = document.querySelectorAll('.product-card');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const filter = button.getAttribute('data-filter');
+
+                    // Remove 'active' class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add 'active' class to the clicked button
+                    button.classList.add('active');
+
+                    // Show/hide products based on the filter
+                    productCards.forEach(card => {
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'block'; // Show matching products
+                        } else {
+                            card.style.display = 'none'; // Hide non-matching products
+                        }
+                    });
+                });
+            });
+
+            // Search Bar
+            document.getElementById('searchInput').addEventListener('input', (event) => {
+                const searchQuery = event.target.value.toLowerCase();
+
+                productCards.forEach(card => {
+                    const productName = card.querySelector('h3').textContent.toLowerCase();
+                    const productCategory = card.getAttribute('data-category').toLowerCase();
+
+                    if (productName.includes(searchQuery) || productCategory.includes(searchQuery)) {
+                        card.style.display = 'block'; // Show matching products
+                    } else {
+                        card.style.display = 'none'; // Hide non-matching products
+                    }
+                });
+            });
+
             document.querySelectorAll('.order-btn').forEach(button => {
                 button.addEventListener('click', () => {
                     const itemName = button.dataset.name;
@@ -233,22 +299,6 @@
 
                     updateCartDisplay();
                     document.getElementById('cartModal').style.display = 'block';
-                });
-            });
-
-            document.getElementById('searchInput').addEventListener('input', (event) => {
-                const searchQuery = event.target.value.toLowerCase();
-                const productCards = document.querySelectorAll('.product-card');
-
-                productCards.forEach(card => {
-                    const productName = card.querySelector('h3').textContent.toLowerCase();
-                    const productCategory = card.dataset.category.toLowerCase();
-
-                    if (productName.includes(searchQuery) || productCategory.includes(searchQuery)) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
                 });
             });
 
