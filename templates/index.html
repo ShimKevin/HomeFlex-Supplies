@@ -18,17 +18,6 @@
                     <span id="cartCount">0</span>
                 </button>
             </div>
-            <div class="social-links">
-                <a href="https://facebook.com/HomeFlex" target="_blank" class="social-icon facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://instagram.com/HomeFlex" target="_blank" class="social-icon instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://tiktok.com/@HomeFlex" target="_blank" class="social-icon tiktok">
-                    <i class="fab fa-tiktok"></i>
-                </a>
-            </div>
             <img src="{{ url_for('static', filename='images/logo.png') }}" alt="HomeFlex Logo" class="logo">
         </div>
     </nav>
@@ -70,22 +59,25 @@
 
         <!-- Feedback Section -->
         <section class="feedback-section">
-            <h2>We Value Your Feedback</h2>
-            <p class="feedback-description">Let us know how we can improve your shopping experience!</p>
-            <form action="https://formsubmit.co/kevinshimannjala@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="New Customer Feedback">
-                <input type="hidden" name="_captcha" value="false">
-                <div class="form-group">
-                    <input type="text" name="name" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <textarea name="feedback" placeholder="Your Feedback" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Submit Feedback</button>
-            </form>
+            <button class="feedback-toggle-btn" onclick="toggleFeedback()">We Value Your Feedback</button>
+            <div id="feedbackForm" style="display: none;">
+                <h2>We Value Your Feedback</h2>
+                <p class="feedback-description">Let us know how we can improve your shopping experience!</p>
+                <form action="https://formsubmit.co/kevinshimannjala@gmail.com" method="POST">
+                    <input type="hidden" name="_subject" value="New Customer Feedback">
+                    <input type="hidden" name="_captcha" value="false">
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="feedback" placeholder="Your Feedback" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Feedback</button>
+                </form>
+            </div>
         </section>
     </main>
 
@@ -175,6 +167,17 @@
                     <li><strong>Account Number:</strong> 12341234</li>
                 </ul>
             </div>
+            <div class="social-links">
+                <a href="https://facebook.com/HomeFlex" target="_blank" class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://instagram.com/HomeFlex" target="_blank" class="social-icon instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com/@HomeFlex" target="_blank" class="social-icon tiktok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
         </div>
         <p class="copyright">&copy; <span id="currentYear"></span> HomeFlex Supplies. All rights reserved.</p>
     </footer>
@@ -208,6 +211,11 @@
                     updateCartDisplay();
                 });
             });
+        }
+
+        function toggleFeedback() {
+            const feedbackForm = document.getElementById('feedbackForm');
+            feedbackForm.style.display = feedbackForm.style.display === 'none' ? 'block' : 'none';
         }
 
         document.addEventListener('DOMContentLoaded', () => {
