@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeFlex Supplies - Modern Home Essentials</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="cart-section">
+                <button class="checkout-btn" onclick="document.getElementById('cartModal').style.display = 'block';">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span id="cartCount">0</span>
+                </button>
+            </div>
+            <div class="social-links">
+                <a href="https://facebook.com/HomeFlex" target="_blank" class="social-icon facebook">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://instagram.com/HomeFlex" target="_blank" class="social-icon instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://tiktok.com/@HomeFlex" target="_blank" class="social-icon tiktok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="HomeFlex Logo" class="logo">
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Flex Your Home Style</h1>
+            <p>Premium Home Essentials at Amazing Prices</p>
+            <div class="search-bar">
+                <input type="text" placeholder="Search products..." id="searchInput">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Products Section -->
+        <section class="products-container">
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="kitchen">Kitchen</button>
+                <button class="filter-btn" data-filter="bath">Bath</button>
+                <button class="filter-btn" data-filter="living">Living</button>
+            </div>
+            
+            <div class="products-grid" id="productsGrid">
+                {% for product in products %}
+                <div class="product-card" data-category="{{ product.category }}" data-price="{{ product.price }}">
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <p>KES {{ product.price }}</p>
+                    <button class="order-btn" data-name="{{ product.name }}">Order</button>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <!-- Feedback Section -->
+        <section class="feedback-section">
+            <h2>We Value Your Feedback</h2>
+            <p class="feedback-description">Let us know how we can improve your shopping experience!</p>
+            <form action="https://formsubmit.co/kevinshimannjala@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New Customer Feedback">
+                <input type="hidden" name="_captcha" value="false">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <textarea name="feedback" placeholder="Your Feedback" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Submit Feedback</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Your Shopping Cart</h2>
+            <div id="cartItems">
+                <!-- Cart items will be dynamically populated here -->
+            </div>
+            <div class="cart-total">
+                <h3>Total: KES <span id="cartTotal">0.00</span></h3>
+            </div>
+            <button class="checkout-btn proceed" onclick="document.getElementById('orderModal').style.display = 'block';">COMPLETE YOUR ORDER →</button>
+        </div>
+    </div>
+
+    <!-- Order Modal -->
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Complete Your Order</h2>
+            <form id="orderForm" action="https://formsubmit.co/kevinshimanjala@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="New Order Received">
+                <input type="hidden" name="_next" value="https://yourwebsite.com/order_confirmation.html">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_captcha" value="false">
+                
+                <div class="form-group">
+                    <input type="text" id="customerName" name="name" placeholder="Full Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="tel" id="customerPhone" name="phone" placeholder="Phone Number" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="customerPlace" name="place" placeholder="Place (e.g., Nairobi)" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" id="itemName" name="item_name" placeholder="Item Name" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <input type="number" id="itemQuantity" name="quantity" placeholder="Number of Items" min="1" required>
+                </div>
+                
+                <button type="submit" class="submit-btn bold-blue">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-address">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>
+                    Dubois Street, Superior Arcade<br>
+                    2nd Floor, Shop 232<br>
+                    Nairobi, Kenya
+                </p>
+            </div>
+            <div class="footer-contacts">
+                <h3>Contact Us</h3>
+                <p>Call us on:</p>
+                <ul>
+                    <li>
+                        <a href="tel:0712323244" class="call-btn">
+                            <i class="fas fa-phone"></i> 0712323244
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:0723456372" class="call-btn">
+                            <i class="fas fa-phone"></i> 0723456372
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-payment">
+                <h3>Payment Information</h3>
+                <p>Pay on delivery via:</p>
+                <ul>
+                    <li><strong>Mpesa Paybill:</strong> 123123</li>
+                    <li><strong>Account Number:</strong> 12341234</li>
+                </ul>
+            </div>
+        </div>
+        <p class="copyright">&copy; <span id="currentYear"></span> HomeFlex Supplies. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('cart-item');
+                itemElement.innerHTML = `
+                    <p>${item.name} (x${item.quantity}) - KES ${item.price * item.quantity}</p>
+                    <button class="remove-btn" data-name="${item.name}">Remove</button>
+                `;
+                cartItemsContainer.appendChild(itemElement);
+                total += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = total.toFixed(2);
+
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemName = button.dataset.name;
+                    cart = cart.filter(item => item.name !== itemName);
+                    updateCartDisplay();
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.order-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const itemName = button.dataset.name;
+                    const itemPrice = parseFloat(button.closest('.product-card').dataset.price);
+
+                    const existingItem = cart.find(item => item.name === itemName);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({ name: itemName, price: itemPrice, quantity: 1 });
+                    }
+
+                    updateCartDisplay();
+                    document.getElementById('cartModal').style.display = 'block';
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (event) => {
+                const searchQuery = event.target.value.toLowerCase();
+                const productCards = document.querySelectorAll('.product-card');
+
+                productCards.forEach(card => {
+                    const productName = card.querySelector('h3').textContent.toLowerCase();
+                    const productCategory = card.dataset.category.toLowerCase();
+
+                    if (productName.includes(searchQuery) || productCategory.includes(searchQuery)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.close').forEach(closeBtn => {
+                closeBtn.addEventListener('click', () => {
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.style.display = 'none';
+                    });
+                });
+            });
+
+            window.onclick = function(event) {
+                if (event.target.classList.contains('modal')) {
+                    event.target.style.display = 'none';
+                }
+            };
+
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        });
+    </script>
+</body>
+</html>

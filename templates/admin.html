@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - HomeFlex</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>HomeFlex Admin Dashboard</h1>
+        
+        <!-- Add Product Form -->
+        <form method="POST" enctype="multipart/form-data" class="admin-form">
+            <h2>Add New Product</h2>
+            <div class="form-group">
+                <input type="text" name="name" placeholder="Product Name" required>
+            </div>
+            
+            <div class="form-group">
+                <input type="number" step="0.01" name="price" placeholder="Price" required>
+            </div>
+            
+            <div class="form-group">
+                <textarea name="description" placeholder="Product Description" rows="4" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Product Image (Required)</label>
+                <input type="file" name="image" accept="image/*" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Product Video (Optional)</label>
+                <input type="file" name="video" accept="video/mp4,video/webm,video/ogg">
+                <small>Accepted formats: MP4, WebM, OGG</small>
+            </div>
+            
+            <div class="form-group">
+                <select name="category" required>
+                    <option value="kitchen">Kitchen</option>
+                    <option value="bath">Bath</option>
+                    <option value="gym">Gym</option>
+                    <option value="living">Living</option>
+                    <option value="bedroom">Bedroom</option>
+                    <option value="office">Office</option>
+                    <option value="outdoor">Outdoor</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <input type="number" step="0.01" name="discount" 
+                       placeholder="Discount (0.1 - 1)" min="0.1" max="1" required>
+            </div>
+            
+            <div class="form-group">
+                <input type="number" name="stock" placeholder="Stock Quantity" min="0" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-plus"></i> Add Product
+            </button>
+        </form>
+
+        <!-- Product Management Section -->
+        <h2>Manage Existing Products</h2>
+        <div class="product-list" id="productList">
+            <div class="product-items">
+                {% for product in products %}
+                <div class="product-item" data-id="{{ product.id }}">
+                    <img src="{{ url_for('static', filename='images/' + product.image) }}" 
+                         class="admin-product-image" 
+                         alt="{{ product.name }}">
+                         
+                    <div class="product-info">
+                        <h3>{{ product.name }}</h3>
+                        <p class="product-meta">
+                            <span class="price">KES {{ product.price }}</span>
+                            <span class="stock">{{ product.stock }} in stock</span>
+                            {% if product.discount > 0 %}
+                            <span class="discount">{{ product.discount*100 }}% OFF</span>
+                            {% endif %}
+                            {% if product.video %}
+                            <span class="video-indicator"><i class="fas fa-video"></i> Has Video</span>
+                            {% endif %}
+                        </p>
+                        
+                        <div class="product-actions">
+                            <button class="stock-btn" data-id="{{ product.id }}">
+                                <i class="fas fa-edit"></i> Update Stock
+                            </button>
+                            <button class="delete-btn" data-id="{{ product.id }}">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Toggle product list visibility
+    function toggleProductList() {
+        const productList = document.getElementById('productList');
+        productList.classList.toggle('hidden');
+    }
+
+    // Handle stock updates
+    document.querySelectorAll('.stock-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const productId = btn.dataset.id;
+            const newStock = prompt('Enter new stock quantity:');
+            
+            if(newStock && !isNaN(newStock)) {
+                try {
+                    const response = await fetch(`/update-stock/${productId}`, {
+                        method: 'PATCH',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ stock: parseInt(newStock) })
+                    });
+                    
+                    if(response.ok) location.reload();
+                } catch(error) {
+                    console.error('Stock update error:', error);
+                }
+            }
+        });
+    });
+
+    // Handle product deletion
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const productId = btn.dataset.id;
+            if(confirm('Are you sure you want to delete this product?')) {
+                try {
+                const response = await fetch(`/delete-product/${productId}`, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    alert('Product deleted successfully!');
+                    location.reload(); // Reload the admin page
+                } else {
+                    alert('Failed to delete the product.');
+                }
+            } catch (error) {
+                console.error('Deletion error:', error);
+            }
+            }
+        });
+    });
+    </script>
+</body>
+</html>
